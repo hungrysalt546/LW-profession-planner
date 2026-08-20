@@ -425,10 +425,6 @@ function showDetail(id){
   $('#detailImg').src =
     skill.detail;
 
-  $('#detailNote').textContent =
-    skill.note ||
-    'Exact current-game description from your screenshot.';
-
   updateDetailControls();
 
   $('#detailModal').showModal();
