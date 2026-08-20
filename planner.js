@@ -23,7 +23,7 @@ const SKILLS=[
   {"id":"prof","name":"Professional Insights","lv":35,"max":5,"tier":"S+","videoRec":5,"branch":"season","prereq":"firebomb","icon":"images/icons/professional_insights.png","detail":"images/details/professional_insights.jpeg","note":""},
   {"id":"medical","name":"Medical Aid","lv":40,"max":5,"tier":"B","videoRec":0,"branch":"main","prereq":null,"icon":"images/icons/medical_aid.png","detail":"images/details/medical_aid.jpeg","note":""},
   {"id":"buddy","name":"Buddy Shield","lv":40,"max":3,"tier":"A","videoRec":0,"branch":"main","prereq":null,"icon":"images/icons/buddy_shield.png","detail":"images/details/buddy_shield.jpeg","note":""},
-  {"id":"overdrive","name":"Intense Overdrive","lv":40,"max":3,"tier":"B","videoRec":2,"branch":"season","prereq":"prof","icon":"images/icons/intense_overdrive.png","detail":"images/details/intense_overdrive.jpeg","note":""},
+  {"id":"overdrive","name":"Intense Overdrive","lv":40,"max":3,"tier":"S","videoRec":2,"branch":"season","prereq":"prof","icon":"images/icons/intense_overdrive.png","detail":"images/details/intense_overdrive.jpeg","note":""},
   {"id":"drone","name":"Drone Supply","lv":45,"max":5,"tier":"B","videoRec":0,"branch":"main","prereq":null,"icon":"images/icons/drone_supply.png","detail":"images/details/drone_supply.jpeg","note":""},
   {"id":"fearless","name":"Fearless Defense","lv":45,"max":5,"tier":"B","videoRec":0,"branch":"main","prereq":null,"icon":"images/icons/fearless_defense.png","detail":"images/details/fearless_defense.jpeg","note":""},
   {"id":"warmth","name":"Gather for Warmth","lv":45,"max":1,"tier":"B","videoRec":0,"branch":"season","prereq":"overdrive","icon":"images/icons/gather_for_warmth.png","detail":"images/details/gather_for_warmth.jpeg","note":""},
@@ -41,62 +41,33 @@ const SKILLS=[
   {"id":"monster","name":"Monster Tracking","lv":70,"max":5,"tier":"A","videoRec":2,"branch":"main","prereq":null,"icon":"images/icons/monster_tracking.png","detail":"images/details/monster_tracking.jpeg","note":""}
 ];
 
-
-/*
-  HUNGRYSALT SPEND ORDER
-
-  Each entry represents ONE point.
-
-  This means you can control exactly where each successive
-  profession point gets allocated.
-*/
-
 const SPEND_ORDER = [
-
-  // Green progression first
+  // Seasonal progression / profession EXP
   'combat',
   'building_insp',
   'winter',
   'double',
   'firebomb',
 
-  // Professional Insights 5/5
-  'prof',
-  'prof',
-  'prof',
-  'prof',
-  'prof',
+  'prof','prof','prof','prof','prof',
 
-  // Finish Combat Experience / Building Inspiration
   'combat',
   'building_insp',
   'combat',
   'building_insp',
 
-  // One More 5/5
-  'onemore',
-  'onemore',
-  'onemore',
-  'onemore',
-  'onemore',
+  // High-value progression
+  'onemore','onemore','onemore','onemore','onemore',
 
-  // Siege Inspiration 3/3
-  'siege_insp',
-  'siege_insp',
-  'siege_insp',
+  'siege_insp','siege_insp','siege_insp',
 
   'outstanding',
 
-  // Rapid Production 5/5
-  'rapid',
-  'rapid',
-  'rapid',
-  'rapid',
-  'rapid',
+  'rapid','rapid','rapid','rapid','rapid',
 
   'meal',
 
-  // First round of Build/Research
+  // Build / research pairs alternate
   'buildfree',
   'researchfree',
   'buildnow',
@@ -107,11 +78,21 @@ const SPEND_ORDER = [
   // Cooperative pair alternates
   'coopbuild',
   'coopresearch',
+  'coopbuild',
+  'coopresearch',
 
-  // Buddy Shield baseline
   'buddy',
 
-  // Economy starts alternating
+  // Economy staging:
+  // Recycling 2 -> Siege Banner -> Resource-Saving 2 -> alternate
+  'recycling',
+  'recycling',
+
+  'banner',
+
+  'saving',
+  'saving',
+
   'recycling',
   'saving',
   'recycling',
@@ -119,111 +100,56 @@ const SPEND_ORDER = [
   'recycling',
   'saving',
 
-  // First 3 Support Boost
-  'support',
-  'support',
-  'support',
+  // Support Boost
+  'support','support','support','support','support',
 
-  // Finish economy pair
-  'recycling',
-  'saving',
-  'recycling',
-  'saving',
+  // Finish Build for Free / Research for Free and Build Now / Research Now
+  'buildfree','researchfree','buildnow','researchnow',
+  'buildfree','researchfree','buildnow','researchnow',
+  'buildfree','researchfree','buildnow','researchnow',
+  'buildfree','researchfree','buildnow','researchnow',
 
-  // Continue alternating build/research skills
-  'buildfree',
-  'researchfree',
-  'buildnow',
-  'researchnow',
+  // Later priorities
+  'master','master','master','master','master',
 
-  'buildfree',
-  'researchfree',
-  'buildnow',
-  'researchnow',
+  'instant','instant','instant','instant','instant',
 
-  'buildfree',
-  'researchfree',
-  'buildnow',
-  'researchnow',
-
-  'buildfree',
-  'researchfree',
-  'buildnow',
-  'researchnow',
-
-  // Finish Support Boost
-  'support',
-  'support',
-
-  // Level 65 priorities
-  'master',
-  'master',
-  'master',
-  'master',
-  'master',
-
-  // Level 70 priority
-  'instant',
-  'instant',
-  'instant',
-  'instant',
-  'instant',
-
-  // Battlefield Cleanup 5/5
-  'cleanup',
-  'cleanup',
-  'cleanup',
-  'cleanup',
-  'cleanup'
+  'cleanup','cleanup','cleanup','cleanup','cleanup'
 ];
 
-
-const $ = s => document.querySelector(s);
-
+const $ = selector => document.querySelector(selector);
 const level = $('#level');
 const points = $('#points');
+const byId = Object.fromEntries(SKILLS.map(skill => [skill.id, skill]));
 
-const byId = Object.fromEntries(
-  SKILLS.map(s => [s.id, s])
-);
+function blankBuild(){
+  return Object.fromEntries(SKILLS.map(skill => [skill.id, 0]));
+}
 
-
-/*
-  BUILD HUNGRYSALT'S RECOMMENDATION
-*/
+function inputsReady(){
+  return level.value !== '' && points.value !== '';
+}
 
 function targetBuild(){
+  if(!inputsReady()) return blankBuild();
 
-  const lv = +level.value;
-  const budget = +points.value;
-
-  const out = {};
-
-  for(const s of SKILLS){
-    out[s.id] = 0;
-  }
-
+  const professionLevel = +level.value;
+  const budget = Math.max(0, +points.value || 0);
+  const out = blankBuild();
   let spent = 0;
 
   for(const id of SPEND_ORDER){
-
     if(spent >= budget) break;
 
-    const s = byId[id];
+    const skill = byId[id];
+    if(!skill) continue;
+    if(skill.lv > professionLevel) continue;
+    if(out[id] >= skill.max) continue;
 
-    if(!s) continue;
-
-    // Skill isn't unlocked yet
-    if(s.lv > lv) continue;
-
-    // Already maxed
-    if(out[id] >= s.max) continue;
-
-    // Green branch prerequisite
     if(
-      s.branch === 'season' &&
-      s.prereq &&
-      (out[s.prereq] || 0) < 1
+      skill.branch === 'season' &&
+      skill.prereq &&
+      (out[skill.prereq] || 0) < 1
     ){
       continue;
     }
@@ -235,840 +161,288 @@ function targetBuild(){
   return out;
 }
 
-
-function used(vals){
-  return Object.values(vals)
-    .reduce((a,b) => a + (+b || 0), 0);
+function used(values){
+  return Object.values(values).reduce((sum, value) => sum + (+value || 0), 0);
 }
 
-
-function tierClass(t){
-
-  return t === 'S+'
-    ? 'sp'
-    : t === 'S'
-    ? 's'
-    : t === 'A'
-    ? 'a'
-    : (t && t.startsWith('B'))
-    ? 'b'
+function tierClass(tier){
+  return tier === 'S+' ? 'sp'
+    : tier === 'S' ? 's'
+    : tier === 'A' ? 'a'
+    : tier === 'B' ? 'b'
     : 'unranked';
 }
 
-
-function prereqMet(s, vals){
-
-  if(
-    s.branch !== 'season' ||
-    !s.prereq
-  ){
-    return true;
-  }
-
-  return (vals[s.prereq] || 0) > 0;
+function prereqMet(skill, values){
+  if(skill.branch !== 'season' || !skill.prereq) return true;
+  return (values[skill.prereq] || 0) > 0;
 }
 
-
-/*
-  CUSTOM BUILD
-
-  null = user is currently looking at HungrySalt recommendation.
-  Once +/- is clicked, a copy is created and becomes their build.
-*/
-
-let customBuild = {};
-
-function currentBuild(){
-
-  const lv = +level.value;
-  const pts = +points.value;
-
-  // Keep everything blank until both fields are entered
-  if(!lv || !pts){
-    const blank = {};
-
-    for(const s of SKILLS){
-      blank[s.id] = 0;
-    }
-
-    return blank;
-  }
-
-  // If the user hasn't customized anything yet,
-  // show HungrySalt's recommendation
-  if(customBuild === null){
-    return targetBuild();
-  }
-
-  return customBuild;
-}
-
-/*
-  Prevent removing the last prerequisite point if a later
-  green skill currently has points in it.
-*/
-
-function hasActiveSeasonChild(id, vals){
-
-  return SKILLS.some(s =>
-    s.branch === 'season' &&
-    s.prereq === id &&
-    (vals[s.id] || 0) > 0
+function hasActiveSeasonChild(id, values){
+  return SKILLS.some(skill =>
+    skill.branch === 'season' &&
+    skill.prereq === id &&
+    (values[skill.id] || 0) > 0
   );
 }
 
+// Starts blank. Once both inputs are entered, recommendation auto-fills.
+let customBuild = blankBuild();
+let isCustom = false;
 
-/*
-  SKILL CARD
-*/
+function currentBuild(){
+  if(!inputsReady()) return blankBuild();
+  return isCustom ? customBuild : targetBuild();
+}
 
-function card(s, vals){
-
-  const n = vals[s.id] || 0;
-
-  const locked =
-    s.lv > +level.value;
-
-  const seasonLocked =
-    s.branch === 'season' &&
-    !prereqMet(s, vals);
-
-  const disabled =
-    locked || seasonLocked;
+function card(skill, values){
+  const current = values[skill.id] || 0;
+  const lockedByLevel = !inputsReady() || skill.lv > +level.value;
+  const lockedBySeason = skill.branch === 'season' && !prereqMet(skill, values);
+  const locked = lockedByLevel || lockedBySeason;
 
   const canMinus =
-    !disabled &&
-    n > 0 &&
-    !(
-      s.branch === 'season' &&
-      n === 1 &&
-      hasActiveSeasonChild(s.id, vals)
-    );
+    !locked &&
+    current > 0 &&
+    !(skill.branch === 'season' && current === 1 && hasActiveSeasonChild(skill.id, values));
 
   const canPlus =
-    !disabled &&
-    n < s.max &&
-    used(vals) < +points.value;
+    !locked &&
+    current < skill.max &&
+    used(values) < (+points.value || 0);
 
   return `
-    <article
-      class="skill
-        ${disabled ? 'locked' : ''}
-        ${s.branch === 'season' ? 'season-skill' : ''}"
-      data-id="${s.id}"
-    >
-
-      <button
-        class="iconBtn"
-        data-detail="${s.id}"
-        title="View in-game description"
-      >
-        <img
-          src="${s.icon}"
-          alt="${s.name}"
-        >
+    <article class="skill ${locked ? 'locked' : ''} ${skill.branch === 'season' ? 'season-skill' : ''}" data-id="${skill.id}">
+      <button class="iconBtn" data-detail="${skill.id}" type="button" title="View ${skill.name}">
+        <img src="${skill.icon}" alt="${skill.name}">
       </button>
 
       <div class="skillbody">
-
-        <div class="name">
-          ${s.name}
-        </div>
+        <div class="name">${skill.name}</div>
 
         <div class="meta">
-          ${
-            s.branch === 'season'
-              ? '<span class="branch">SEASON</span>'
-              : ''
-          }
+          ${skill.branch === 'season' ? '<span class="branch">SEASON</span>' : ''}
         </div>
 
-        ${
-          s.tier
-            ? `<span class="tier cardTier ${tierClass(s.tier)}">${s.tier}</span>`
-            : ''
-        }
+        ${skill.tier ? `<span class="tier cardTier ${tierClass(skill.tier)}">${skill.tier}</span>` : ''}
 
         <div class="controls">
-
-          <button
-            data-adjust="${s.id}"
-            data-d="-1"
-            ${canMinus ? '' : 'disabled'}
-          >
-            −
-          </button>
-
-          <strong>
-            ${n}/${s.max}
-          </strong>
-
-          <button
-            data-adjust="${s.id}"
-            data-d="1"
-            ${canPlus ? '' : 'disabled'}
-          >
-            +
-          </button>
-
+          <button data-adjust="${skill.id}" data-d="-1" type="button" ${canMinus ? '' : 'disabled'}>−</button>
+          <strong>${current}/${skill.max}</strong>
+          <button data-adjust="${skill.id}" data-d="1" type="button" ${canPlus ? '' : 'disabled'}>+</button>
         </div>
-
       </div>
-
     </article>
   `;
 }
 
-
-/*
-  MANUAL +/- ADJUSTMENT
-*/
-
 function adjust(id, change){
+  if(!inputsReady()) return;
 
-  /*
-    First manual edit creates a copy of the
-    HungrySalt recommendation.
-  */
-
-  if(!customBuild){
-    customBuild = {
-      ...targetBuild()
-    };
+  if(!isCustom){
+    customBuild = {...targetBuild()};
+    isCustom = true;
   }
 
-  const s = byId[id];
+  const skill = byId[id];
+  if(!skill) return;
 
-  if(!s) return;
-
-  const current =
-    customBuild[id] || 0;
-
-
-  /*
-    ADD POINT
-  */
+  const current = customBuild[id] || 0;
 
   if(change > 0){
+    if(used(customBuild) >= +points.value) return;
+    if(current >= skill.max) return;
+    if(skill.lv > +level.value) return;
 
-    // Can't spend more points than available
     if(
-      used(customBuild) >=
-      +points.value
+      skill.branch === 'season' &&
+      skill.prereq &&
+      (customBuild[skill.prereq] || 0) < 1
     ){
       return;
     }
 
-    // Skill already maxed
-    if(current >= s.max){
-      return;
-    }
-
-    // Skill level not unlocked
-    if(s.lv > +level.value){
-      return;
-    }
-
-    // Green prerequisite
-    if(
-      s.branch === 'season' &&
-      s.prereq &&
-      (customBuild[s.prereq] || 0) < 1
-    ){
-      return;
-    }
-
-    customBuild[id] =
-      current + 1;
+    customBuild[id] = current + 1;
   }
-
-
-  /*
-    REMOVE POINT
-  */
 
   if(change < 0){
-
-    if(current <= 0){
-      return;
-    }
-
-    /*
-      Don't allow someone to remove the
-      final prerequisite point while a later
-      green skill is active.
-    */
+    if(current <= 0) return;
 
     if(
-      s.branch === 'season' &&
+      skill.branch === 'season' &&
       current === 1 &&
-      hasActiveSeasonChild(
-        id,
-        customBuild
-      )
+      hasActiveSeasonChild(id, customBuild)
     ){
       return;
     }
 
-    customBuild[id] =
-      current - 1;
+    customBuild[id] = current - 1;
   }
 
-
-  /*
-    The old comparison is stale after an edit.
-  */
-
-  const compareBox =
-    $('#compareBox');
-
-  if(compareBox){
-    compareBox.classList.add('hidden');
-  }
-
+  hideCompare();
   render();
 }
 
-
-/*
-  RESET
-*/
+function hideCompare(){
+  const box = $('#compareBox');
+  if(box) box.classList.add('hidden');
+}
 
 function resetToRecommended(){
-
-  customBuild = null;
-
-  const compareBox =
-    $('#compareBox');
-
-  if(compareBox){
-    compareBox.classList.add('hidden');
-  }
-
+  if(!inputsReady()) return;
+  isCustom = false;
+  customBuild = blankBuild();
+  hideCompare();
   render();
 }
 
-
-/*
-  RENDER TREE
-*/
-
-function render(){
-
-  const vals =
-    currentBuild();
-
-  const levels = [
-    70,
-    65,
-    60,
-    55,
-    50,
-    45,
-    40,
-    35,
-    30,
-    25,
-    20,
-    15,
-    10,
-    5,
-    1
-  ];
-
-  let html = '';
-
-  for(const lv of levels){
-
-    const mains =
-      SKILLS.filter(
-        s =>
-          s.lv === lv &&
-          s.branch === 'main'
-      );
-
-    const seasons =
-      SKILLS.filter(
-        s =>
-          s.lv === lv &&
-          s.branch === 'season'
-      );
-
-    html += `
-      <section class="level-row">
-
-        <div class="lvl">
-          ${lv}
-        </div>
-
-        <div class="mainpair">
-          ${
-            mains
-              .map(s => card(s, vals))
-              .join('')
-          }
-        </div>
-
-        <div class="seasoncol">
-          ${
-            seasons
-              .map(s => card(s, vals))
-              .join('')
-          }
-        </div>
-
-      </section>
-    `;
-  }
-
-
-  $('#tree').innerHTML =
-    html;
-
-
-  /*
-    POINT COUNTER
-  */
-
-const u = used(vals);
-
-const lv = +level.value;
-const pts = +points.value;
-
-if(!lv || !pts){
-
-  $('#used').textContent = '—';
-  $('#available').textContent = '—';
-  $('#remaining').textContent = '—';
-
-}else{
-
-  $('#used').textContent = u;
-  $('#available').textContent = pts;
-  $('#remaining').textContent = pts - u;
-
-}
-
-
-  const meter =
-    $('.meter');
-
-  if(meter){
-
-    meter.classList.toggle(
-      'over',
-      u > +points.value
-    );
-
-  }
-
-
-  /*
-    SUBTITLE
-  */
-
-const subtitle = $('#subtitle');
-
-if(subtitle){
-
-  if(!level.value || !points.value){
-
-    subtitle.textContent =
-      'Enter profession level and available points';
-
-  }else{
-
-    subtitle.textContent =
-      `Lv.${level.value} · ${points.value} available${
-        customBuild !== null
-          ? ' · CUSTOM'
-          : ''
-      }`;
-
-  }
-
-}
-
-
-  /*
-    DESCRIPTION POPUPS
-  */
-
-  document
-    .querySelectorAll('[data-detail]')
-    .forEach(button => {
-
-      button.onclick = e => {
-
-        e.stopPropagation();
-
-        showDetail(
-          button.dataset.detail
-        );
-
-      };
-
-    });
-
-
-  /*
-    +/- BUTTONS
-  */
-
-  document
-    .querySelectorAll('[data-adjust]')
-    .forEach(button => {
-
-      button.onclick = e => {
-
-        e.stopPropagation();
-
-        adjust(
-          button.dataset.adjust,
-          +button.dataset.d
-        );
-
-      };
-
-    });
-
-}
-
-
-/*
-  DETAIL POPUP
-*/
-
-function showDetail(id){
-
-  const s =
-    byId[id];
-
-  if(!s) return;
-
-
-  $('#detailTitle').textContent =
-    s.name;
-
-
-  const t =
-    $('#detailTier');
-
-
-  if(s.tier){
-
-    t.textContent =
-      s.tier;
-
-    t.className =
-      'tier ' +
-      tierClass(s.tier);
-
-    t.style.display =
-      'inline-flex';
-
-  }else{
-
-    t.textContent =
-      '';
-
-    t.style.display =
-      'none';
-
-  }
-
-
-  $('#detailImg').src =
-    s.detail;
-
-  $('#detailModal')
-    .showModal();
-
-}
-
-
-/*
-  CHANGING LEVEL OR AVAILABLE POINTS
-
-  Reset manual changes and rebuild the
-  HungrySalt recommendation.
-*/
-
-level.oninput = () => {
-
-  const lv = +level.value;
-  const pts = +points.value;
-
-  if(lv && pts){
-    customBuild = null;
-  }else{
-    customBuild = {};
-  }
-
-  const compareBox = $('#compareBox');
-
-  if(compareBox){
-    compareBox.classList.add('hidden');
-  }
-
+function clearBuild(){
+  customBuild = blankBuild();
+  isCustom = true;
+  hideCompare();
   render();
-};
-
-
-points.oninput = () => {
-
-  const lv = +level.value;
-  const pts = +points.value;
-
-  if(lv && pts){
-    customBuild = null;
-  }else{
-    customBuild = {};
-  }
-
-  const compareBox = $('#compareBox');
-
-  if(compareBox){
-    compareBox.classList.add('hidden');
-  }
-
-  render();
-};
-
-
-/*
-  COMPARE CURRENT BUILD TO HUNGRYSALT BUILD
-*/
+}
 
 function compareBuild(){
+  if(!inputsReady()) return;
 
-  const recommended =
-    targetBuild();
-
-  const yours =
-    currentBuild();
-
+  const recommended = targetBuild();
+  const yours = currentBuild();
   const rows = [];
 
+  for(const skill of SKILLS){
+    if(skill.lv > +level.value) continue;
 
-  for(const s of SKILLS){
+    const rec = recommended[skill.id] || 0;
+    const actual = yours[skill.id] || 0;
 
-    /*
-      Don't compare skills the user
-      hasn't unlocked yet.
-    */
+    if(actual === rec) continue;
 
-    if(s.lv > +level.value){
-      continue;
-    }
+    const direction = actual > rec ? 'add' : 'remove';
+    const delta = Math.abs(actual - rec);
+    const sign = actual > rec ? '+' : '−';
 
-
-    const rec =
-      recommended[s.id] || 0;
-
-    const actual =
-      yours[s.id] || 0;
-
-
-    /*
-      Same allocation = nothing to show.
-    */
-
-    if(actual === rec){
-      continue;
-    }
-
-
-    /*
-      User added points.
-    */
-
-    if(actual > rec){
-
-      rows.push(`
-        <div class="change add">
-
-          <strong>
-            ${s.name}
-          </strong>
-
-          <span class="compareValues">
-            ${rec}/${s.max}
-            →
-            ${actual}/${s.max}
-          </span>
-
-          <span class="compareDifference">
-            +${actual - rec}
-          </span>
-
-        </div>
-      `);
-
-    }
-
-
-    /*
-      User removed points.
-    */
-
-    else{
-
-      rows.push(`
-        <div class="change remove">
-
-          <strong>
-            ${s.name}
-          </strong>
-
-          <span class="compareValues">
-            ${rec}/${s.max}
-            →
-            ${actual}/${s.max}
-          </span>
-
-          <span class="compareDifference">
-            −${rec - actual}
-          </span>
-
-        </div>
-      `);
-
-    }
-
+    rows.push(`
+      <div class="change ${direction}">
+        <strong>${skill.name}</strong>
+        <span class="compareValues">${rec}/${skill.max} → ${actual}/${skill.max}</span>
+        <span class="compareDifference">${sign}${delta}</span>
+      </div>
+    `);
   }
 
-
-  const recommendedUsed =
-    used(recommended);
-
-  const yourUsed =
-    used(yours);
-
-  const available =
-    +points.value;
-
-  const yourRemaining =
-    available - yourUsed;
-
-
-  /*
-    Summary
-  */
-
-  let summary = `
+  const summary = `
     <div class="compareSummary">
-
-      <div>
-        HungrySalt Build:
-        <strong>
-          ${recommendedUsed}
-        </strong>
-        allocated
-      </div>
-
-      <div>
-        Your Build:
-        <strong>
-          ${yourUsed}
-        </strong>
-        allocated
-      </div>
-
-      <div>
-        Available:
-        <strong>
-          ${available}
-        </strong>
-      </div>
-
-      <div>
-        Unspent:
-        <strong>
-          ${yourRemaining}
-        </strong>
-      </div>
-
+      <span>Salt: <strong>${used(recommended)}</strong></span>
+      <span>Yours: <strong>${used(yours)}</strong></span>
+      <span>Available: <strong>${points.value}</strong></span>
+      <span>Left: <strong>${+points.value - used(yours)}</strong></span>
     </div>
   `;
 
-
-  /*
-    Nothing changed
-  */
-
   if(rows.length === 0){
-
-    rows.push(`
-      <div class="change match">
-        No changes from HungrySalt Build.
-      </div>
-    `);
-
+    rows.push('<div class="change match">No changes from HungrySalt Build.</div>');
   }
 
-
-  $('#compareText').innerHTML =
-    summary +
-    rows.join('');
-
-
-  $('#compareBox')
-    .classList.remove('hidden');
-
+  $('#compareText').innerHTML = summary + rows.join('');
+  $('#compareBox').classList.remove('hidden');
+  $('#compareBox').scrollIntoView({behavior:'smooth', block:'nearest'});
 }
 
-/*
-  CLEAR BUILD
+function showDetail(id){
+  const skill = byId[id];
+  if(!skill) return;
 
-  Starts a completely blank custom build.
-*/
+  $('#detailTitle').textContent = skill.name;
 
-function clearBuild(){
-
-  customBuild = {};
-
-  for(const s of SKILLS){
-    customBuild[s.id] = 0;
+  const tier = $('#detailTier');
+  if(skill.tier){
+    tier.textContent = skill.tier;
+    tier.className = 'tier ' + tierClass(skill.tier);
+    tier.style.display = 'inline-flex';
+  } else {
+    tier.textContent = '';
+    tier.style.display = 'none';
   }
 
-  const compareBox =
-    $('#compareBox');
+  $('#detailImg').src = skill.detail;
+  $('#detailNote').textContent = skill.note || 'Exact current-game description from your screenshot.';
+  $('#detailModal').showModal();
+}
 
-  if(compareBox){
-    compareBox.classList.add('hidden');
+function render(){
+  const values = currentBuild();
+  const levels = [70,65,60,55,50,45,40,35,30,25,20,15,10,5,1];
+
+  $('#tree').innerHTML = levels.map(rowLevel => {
+    const mains = SKILLS.filter(skill => skill.lv === rowLevel && skill.branch === 'main');
+    const seasons = SKILLS.filter(skill => skill.lv === rowLevel && skill.branch === 'season');
+
+    return `
+      <section class="level-row">
+        <div class="lvl">${rowLevel}</div>
+        <div class="mainpair">${mains.map(skill => card(skill, values)).join('')}</div>
+        <div class="seasoncol">${seasons.map(skill => card(skill, values)).join('')}</div>
+      </section>
+    `;
+  }).join('');
+
+  const meter = $('.meter');
+  const subtitle = $('#subtitle');
+  const modeTitle = $('#modeTitle');
+
+  if(!inputsReady()){
+    $('#used').textContent = '—';
+    $('#available').textContent = '—';
+    $('#remaining').textContent = '—';
+    subtitle.textContent = 'Enter profession level and available points';
+    modeTitle.textContent = 'Build';
+    meter.classList.remove('over');
+  } else {
+    const totalUsed = used(values);
+    $('#used').textContent = totalUsed;
+    $('#available').textContent = points.value;
+    $('#remaining').textContent = (+points.value - totalUsed);
+    subtitle.textContent = `Lv.${level.value} · ${points.value} available${isCustom ? ' · CUSTOM' : ''}`;
+    modeTitle.textContent = isCustom ? 'Custom Build' : 'HungrySalt Build';
+    meter.classList.toggle('over', totalUsed > +points.value);
+  }
+
+  document.querySelectorAll('[data-adjust]').forEach(button => {
+    button.addEventListener('click', event => {
+      event.stopPropagation();
+      adjust(button.dataset.adjust, +button.dataset.d);
+    });
+  });
+
+  document.querySelectorAll('[data-detail]').forEach(button => {
+    button.addEventListener('click', event => {
+      event.stopPropagation();
+      showDetail(button.dataset.detail);
+    });
+  });
+}
+
+function onInputsChanged(){
+  hideCompare();
+
+  if(inputsReady()){
+    isCustom = false;
+    customBuild = blankBuild();
+  } else {
+    isCustom = true;
+    customBuild = blankBuild();
   }
 
   render();
 }
 
+level.addEventListener('input', onInputsChanged);
+points.addEventListener('input', onInputsChanged);
 
-/*
-  BUTTONS
-
-  Existing blue Recommended button becomes Reset.
-  Existing gray Export button becomes Clear.
-  Existing orange Compare button stays Compare.
-*/
-
-$('#resetBtn').onclick = resetToRecommended;
-$('#clearBtn').onclick = clearBuild;
-$('#compareBtn').onclick = compareBuild;
-
-/*
-  CLOSE DESCRIPTION
-*/
-
-$('#closeDetail').onclick = () => {
-
-  $('#detailModal')
-    .close();
-
-};
-
-
-/*
-  INITIAL LOAD
-*/
+$('#resetBtn').addEventListener('click', resetToRecommended);
+$('#clearBtn').addEventListener('click', clearBuild);
+$('#compareBtn').addEventListener('click', compareBuild);
+$('#closeDetail').addEventListener('click', () => $('#detailModal').close());
 
 render();
