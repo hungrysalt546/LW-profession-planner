@@ -1,63 +1,59 @@
 :root{--navy:#10233d;--blue:#1f5e99;--cream:#f7f1e8;--orange:#f7a31b;--green:#36bd78;--line:#d8c9b5}*{box-sizing:border-box}body{margin:0;background:#eef2f6;color:#152035;font-family:Arial,Helvetica,sans-serif}header{background:linear-gradient(135deg,#10233d,#275b8d);color:#fff;padding:18px;display:flex;gap:18px;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5;box-shadow:0 3px 14px #0003}.eyebrow{font-size:11px;font-weight:900;letter-spacing:2px;color:#ffd45a}h1{margin:2px 0;font-size:clamp(22px,4vw,36px)}header p{margin:0;opacity:.8}.stats{display:flex;gap:10px}.stats label{font-size:11px;font-weight:800;text-transform:uppercase}.stats input{display:block;width:90px;margin-top:4px;border:0;border-radius:9px;padding:9px;font-size:18px;font-weight:900}.source-note{padding:10px 16px;background:#fff5c9;border-bottom:1px solid #e6cf69;font-size:13px}nav{display:flex;gap:8px;padding:12px 16px;background:#fff;position:sticky;top:86px;z-index:4;border-bottom:1px solid #ddd}button{cursor:pointer}.tab,#compareBtn{border:0;border-radius:10px;padding:10px 15px;font-weight:900;background:#dce5ee;color:#18324f}.tab.active{background:#1769aa;color:#fff}#compareBtn{margin-left:auto;background:#f3a51d;color:#172238}.summary{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#10233d;color:white}.summary b,.summary span{display:block}.summary #subtitle{font-size:12px;opacity:.75;margin-top:2px}.meter{font-weight:900}.meter.over{color:#ff7373}.tree{max-width:1050px;margin:16px auto;padding:0 12px}.level-row{display:grid;grid-template-columns:55px 1fr minmax(210px,.46fr);gap:10px;align-items:stretch;margin-bottom:10px}.lvl{background:#aeb5bd;color:#fff;font-weight:900;font-size:24px;border-radius:16px 0 0 16px;display:flex;align-items:center;justify-content:center}.mainpair{display:grid;grid-template-columns:1fr 1fr;gap:10px;background:#fff7ef;padding:9px;border-radius:12px;border:1px solid #ead8c7}.seasoncol{background:#e7f8e5;padding:9px;border-left:5px solid #58b45b;border-radius:12px;display:flex;align-items:center}.skill{width:100%;position:relative;display:grid;grid-template-columns:82px 1fr;gap:9px;align-items:center;background:white;border:2px solid #e0d1bd;border-radius:13px;padding:7px;min-height:98px}.season-skill{border-color:#86cd8c}.skill.locked{filter:grayscale(1);opacity:.45}.iconBtn{width:76px;height:76px;padding:0;border:0;background:transparent;border-radius:12px;overflow:hidden}.iconBtn img{width:100%;height:100%;object-fit:cover}.name{font-weight:900;font-size:15px;line-height:1.08}.meta{display:flex;gap:5px;align-items:center;margin:5px 0}.tier,.unlock,.branch{font-size:10px;font-weight:900;border-radius:999px;padding:3px 6px}.tier{background:#7547ba;color:white}.tier.sp{background:#d2222d}.tier.a{background:#edaa22;color:#222}.tier.b{background:#4da95b}.tier.new{background:#26364a}.unlock{background:#e7edf4}.branch{background:#d6f5dc;color:#197337}.controls{display:flex;align-items:center;gap:7px}.controls button{width:29px;height:27px;border:0;border-radius:7px;background:#a8b8c9;color:white;font-size:18px;font-weight:900}.controls strong{min-width:38px;text-align:center}.rec{position:absolute;right:7px;bottom:6px;font-size:9px;font-weight:900;color:#46725a;background:#e7f6eb;padding:3px 5px;border-radius:6px}.compare{max-width:850px;margin:12px auto 30px;padding:16px;background:white;border-radius:14px;box-shadow:0 4px 20px #0002}.hidden{display:none}.change{padding:9px 11px;border-radius:8px;margin:6px 0;font-weight:800}.add{background:#e4f7e9;color:#176a30}.remove{background:#fde7e7;color:#9a2424}.save{background:#fff2c8;color:#745500}.match{background:#e4f7e9}.modalHead{display:flex;align-items:center;justify-content:space-between}.modalHead h2{margin:0}.modalHead button{border:0;background:#e7edf4;border-radius:9px;font-size:25px;width:38px}dialog{width:min(720px,95vw);border:0;border-radius:16px;padding:14px;box-shadow:0 20px 70px #0006}dialog::backdrop{background:#0009}#detailImg{display:block;width:100%;height:auto;border-radius:10px;margin-top:10px}#detailNote{font-size:13px;background:#fff5c9;padding:9px;border-radius:8px}footer{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;padding:18px;background:#10233d;color:#cbd7e5;font-size:12px}@media(max-width:760px){header{position:static;display:block}.stats{margin-top:12px}nav{top:0}.level-row{grid-template-columns:42px 1fr}.seasoncol{grid-column:2}.mainpair{grid-template-columns:1fr}.lvl{grid-row:1/3}.skill{grid-template-columns:72px 1fr}.iconBtn{width:66px;height:66px}}
 .name{padding-right:42px}.cardTier{position:absolute;right:8px;top:8px;font-size:11px;padding:4px 7px;z-index:2;box-shadow:0 1px 3px #0002}.modalTitleRow{display:flex;align-items:center;gap:10px;min-width:0}.modalTitleRow h2{min-width:0}.modalTitleRow #detailTier{font-size:12px;padding:5px 9px;flex:0 0 auto}
-/* =========================
-   MOBILE RESPONSIVE OVERRIDES
-   ========================= */
+/* ==========================================
+   MOBILE — GAME-LIKE COMPACT SKILL TREE
+   ========================================== */
 
-@media (max-width: 760px){
+@media (max-width:760px){
 
   body{
     overflow-x:hidden;
   }
 
-  /* Header */
+  /* ---------- HEADER ---------- */
+
   header,
   .brandHeader{
     position:static;
   }
 
   .brandHeader{
-    grid-template-columns:1fr 82px;
+    grid-template-columns:1fr 78px;
     gap:8px;
-    padding:10px 12px;
+    padding:9px 10px;
     min-height:auto;
   }
 
   .brandCopy h1{
-    font-size:23px;
+    font-size:22px;
     line-height:1.05;
   }
 
   .guideTitle{
-    font-size:11px;
-    letter-spacing:1px;
+    font-size:10px;
+    letter-spacing:.8px;
   }
 
   .headerMascot{
-    height:72px;
+    height:68px;
     border:0;
   }
 
   .headerMascot img{
-    height:82px;
-    max-width:82px;
+    height:78px;
+    max-width:78px;
   }
 
   .mascotTag{
     display:none;
   }
 
-  /* Level + points inputs */
   .brandHeader .stats{
     grid-column:1 / 3;
     width:100%;
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:8px;
-  }
-
-  .stats label{
-    width:100%;
+    gap:7px;
   }
 
   .stats input,
@@ -65,18 +61,22 @@
     width:100%;
     min-width:0;
     font-size:16px;
-    padding:8px;
+    padding:7px;
   }
 
-  /* Buttons */
+
+  /* ---------- ACTION BUTTONS ---------- */
+
   nav{
     position:sticky;
     top:0;
     z-index:20;
-    padding:8px;
-    gap:6px;
+
     display:grid;
     grid-template-columns:1fr 1fr 1fr;
+
+    gap:5px;
+    padding:7px;
   }
 
   #resetBtn,
@@ -84,204 +84,268 @@
   #compareBtn{
     width:100%;
     min-width:0;
-    padding:9px 6px;
-    font-size:11px;
+    margin:0;
+
+    padding:8px 4px;
+
+    font-size:10px;
     line-height:1.1;
+
     white-space:normal;
   }
 
-  #compareBtn{
-    margin-left:0;
-  }
 
-  /* Summary */
+  /* ---------- SUMMARY ---------- */
+
   .summary{
     position:sticky;
-    top:54px;
+    top:48px;
     z-index:15;
-    padding:10px 12px;
+
+    padding:8px 10px;
     gap:8px;
   }
 
   .summary #subtitle{
-    font-size:12px;
-    line-height:1.25;
+    font-size:11px;
   }
 
   .summary .meter{
-    font-size:12px;
-    gap:4px;
-    flex-wrap:wrap;
-    justify-content:flex-end;
+    font-size:11px;
+    gap:3px;
   }
 
-  /* Main tree */
+
+  /* ---------- TREE ---------- */
+
   .tree{
     width:100%;
     max-width:none;
-    margin:10px auto;
-    padding:0 6px;
+
+    margin:8px auto;
+    padding:0 5px;
   }
 
   .level-row{
-    grid-template-columns:34px minmax(0,1fr);
-    gap:6px;
-    margin-bottom:7px;
+    display:grid;
+
+    /*
+       LEVEL | TWO MAIN SKILLS | SEASON
+    */
+    grid-template-columns:
+      30px
+      minmax(0,1fr)
+      86px;
+
+    gap:5px;
+
+    align-items:stretch;
+
+    margin-bottom:6px;
   }
 
   .lvl{
-    grid-row:1 / 3;
-    font-size:18px;
-    border-radius:10px 0 0 10px;
-    min-width:34px;
+    font-size:16px;
+    min-width:30px;
+
+    border-radius:9px 0 0 9px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
   }
+
+
+  /* Two normal skills stay side-by-side */
 
   .mainpair{
-    grid-template-columns:1fr;
-    gap:6px;
-    padding:6px;
-  }
+    display:grid;
+    grid-template-columns:1fr 1fr;
 
-  .seasoncol{
-    grid-column:2;
-    width:100%;
-    padding:6px;
-    border-left-width:4px;
-  }
+    gap:5px;
 
-  /* Skill cards */
-  .skill{
-    grid-template-columns:58px minmax(0,1fr);
-    min-height:74px;
     padding:5px;
-    gap:7px;
-    border-radius:10px;
-  }
-
-  .iconBtn{
-    width:54px;
-    height:54px;
     border-radius:9px;
   }
 
-  .name{
-    font-size:13px;
-    padding-right:34px;
+
+  /* Green branch stays on the right */
+
+  .seasoncol{
+    grid-column:auto;
+
+    width:86px;
+
+    padding:5px;
+
+    border-left-width:3px;
+    border-radius:9px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
   }
+
+
+  /* ---------- COMPACT SKILL CARD ---------- */
+
+  .skill{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+
+    min-width:0;
+    min-height:0;
+
+    padding:3px;
+
+    gap:2px;
+
+    border-radius:9px;
+  }
+
+
+  /* Icon becomes the primary UI */
+
+  .iconBtn{
+    width:58px;
+    height:58px;
+
+    flex:0 0 58px;
+
+    border-radius:8px;
+  }
+
+  .iconBtn img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+
+
+  /* Skill body is compact */
+
+  .skillbody{
+    width:100%;
+    min-width:0;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+
+
+  /* Hide the full names on phone */
+
+  .name{
+    display:none;
+  }
+
+
+  /* Hide SEASON text — green column already tells us */
 
   .meta{
-    margin:3px 0;
+    display:none;
   }
 
-  .branch,
-  .tier,
-  .unlock{
-    font-size:8px;
-    padding:2px 5px;
-  }
+
+  /* Keep tier badge on icon/card */
 
   .cardTier{
-    right:5px;
-    top:5px;
-    font-size:9px;
-    padding:3px 5px;
+    right:2px;
+    top:2px;
+
+    font-size:8px;
+    padding:2px 4px;
   }
 
+
+  /* Allocation controls */
+
   .controls{
-    gap:5px;
+    width:100%;
+
+    display:grid;
+    grid-template-columns:22px 1fr 22px;
+
+    align-items:center;
+
+    gap:2px;
+
+    margin-top:1px;
   }
 
   .controls button{
-    width:27px;
-    height:25px;
-    font-size:16px;
+    width:22px;
+    height:22px;
+
+    padding:0;
+
+    border-radius:5px;
+
+    font-size:14px;
+    line-height:22px;
   }
 
   .controls strong{
-    min-width:32px;
-    font-size:13px;
+    min-width:0;
+
+    text-align:center;
+
+    font-size:11px;
   }
 
-  /* Compare box */
+
+  /* ---------- GREEN SKILL ---------- */
+
+  .seasoncol .skill{
+    width:100%;
+  }
+
+  .seasoncol .iconBtn{
+    width:58px;
+    height:58px;
+  }
+
+
+  /* ---------- LOCKED ---------- */
+
+  .skill.locked{
+    opacity:.38;
+  }
+
+
+  /* ---------- COMPARE ---------- */
+
   #compareBox,
   .compare{
-    margin:10px 6px 18px;
+    margin:8px 5px 16px;
     padding:10px;
   }
 
   .compareSummary{
-    font-size:12px;
+    font-size:11px;
   }
 
   .change{
-    display:grid;
-    grid-template-columns:1fr auto;
-    gap:4px 8px;
-    font-size:12px;
+    font-size:11px;
   }
 
-  .compareValues{
-    grid-column:1;
-  }
 
-  .compareDifference{
-    grid-column:2;
-    grid-row:1 / 3;
-    align-self:center;
-  }
+  /* ---------- MODAL ---------- */
 
-  /* Detail popup */
   dialog{
     width:96vw;
     max-height:90vh;
+
     overflow:auto;
-    padding:10px;
+
+    padding:9px;
   }
 
   .modalHead h2{
-    font-size:18px;
+    font-size:17px;
   }
 
-  #detailNote{
-    font-size:12px;
-  }
-
-  footer{
-    padding:12px;
-    gap:10px;
-    font-size:10px;
-  }
-}
-
-
-/* Extra-small phones */
-@media (max-width: 420px){
-
-  .brandCopy h1{
-    font-size:20px;
-  }
-
-  nav{
-    grid-template-columns:1fr;
-  }
-
-  #resetBtn,
-  #clearBtn,
-  #compareBtn{
-    padding:8px;
-    font-size:12px;
-  }
-
-  .summary{
-    top:126px;
-  }
-
-  .skill{
-    grid-template-columns:52px minmax(0,1fr);
-  }
-
-  .iconBtn{
-    width:48px;
-    height:48px;
-  }
 }
