@@ -350,24 +350,52 @@ function compareBuild(){
 }
 
 function showDetail(id){
-  const skill = byId[id];
-  if(!skill) return;
 
-  $('#detailTitle').textContent = skill.name;
+  const s = byId[id];
 
-  const tier = $('#detailTier');
-  if(skill.tier){
-    tier.textContent = skill.tier;
-    tier.className = 'tier ' + tierClass(skill.tier);
-    tier.style.display = 'inline-flex';
-  } else {
-    tier.textContent = '';
-    tier.style.display = 'none';
+  if(!s) return;
+
+  openDetailId = id;
+
+  $('#detailTitle').textContent =
+    s.name;
+
+  const t =
+    $('#detailTier');
+
+  if(s.tier){
+
+    t.textContent =
+      s.tier;
+
+    t.className =
+      'tier ' +
+      tierClass(s.tier);
+
+    t.style.display =
+      'inline-flex';
+
+  }else{
+
+    t.textContent =
+      '';
+
+    t.style.display =
+      'none';
+
   }
 
-  $('#detailImg').src = skill.detail;
-  $('#detailNote').textContent = skill.note || 'Exact current-game description from your screenshot.';
-  $('#detailModal').showModal();
+  const vals =
+    currentBuild();
+
+  $('#detailPoints').textContent =
+    `${vals[id] || 0}/${s.max}`;
+
+  $('#detailImg').src =
+    s.detail;
+
+  $('#detailModal')
+    .showModal();
 }
 
 function render(){
@@ -422,6 +450,45 @@ function render(){
     });
   });
 }
+
+$('#detailMinus').onclick = () => {
+
+  if(!openDetailId) return;
+
+  adjust(
+    openDetailId,
+    -1
+  );
+
+  const s =
+    byId[openDetailId];
+
+  const vals =
+    currentBuild();
+
+  $('#detailPoints').textContent =
+    `${vals[openDetailId] || 0}/${s.max}`;
+};
+
+
+$('#detailPlus').onclick = () => {
+
+  if(!openDetailId) return;
+
+  adjust(
+    openDetailId,
+    1
+  );
+
+  const s =
+    byId[openDetailId];
+
+  const vals =
+    currentBuild();
+
+  $('#detailPoints').textContent =
+    `${vals[openDetailId] || 0}/${s.max}`;
+};
 
 function onInputsChanged(){
   hideCompare();
