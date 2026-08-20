@@ -489,6 +489,17 @@ footer{
     --mobile-nav-h:52px;
   }
 
+  body{
+    overflow-x:visible;
+  }
+  
+  .brandHeader,
+  nav,
+  .summary{
+    position:-webkit-sticky;
+    position:sticky;
+  }
+
   .brandHeader{
     position:sticky;
     top:0;
@@ -608,7 +619,7 @@ footer{
     Each individual skill card therefore gets the same width.
   */
   .level-row{
-    grid-template-columns:30px minmax(0,2fr) minmax(0,1fr);
+    grid-template-columns:30px repeat(3,minmax(0,1fr));
     gap:5px;
     margin-bottom:6px;
     align-items:stretch;
@@ -621,22 +632,24 @@ footer{
   }
 
   .mainpair{
+    grid-column:2 / 4;
     min-width:0;
     display:grid;
-    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    grid-template-columns:repeat(2,minmax(0,1fr));
     gap:5px;
     padding:5px;
   }
-
+  
   .seasoncol{
-    grid-column:auto;
+    grid-column:4;
     width:auto;
     min-width:0;
     padding:5px;
     border-left-width:3px;
-    justify-content:stretch;
+    display:flex;
+    align-items:stretch;
   }
-
+  
   .mainpair .skill,
   .seasoncol .skill{
     width:100%;
@@ -760,7 +773,7 @@ footer{
   }
 
   .level-row{
-    grid-template-columns:28px minmax(0,2fr) minmax(0,1fr);
+    grid-template-columns:28px repeat(3,minmax(0,1fr));
     gap:4px;
   }
 
@@ -769,10 +782,13 @@ footer{
     font-size:15px;
   }
 
-  .mainpair,
+  .mainpair{
+    grid-column:2 / 4;
+  }
+  
   .seasoncol{
-    padding:4px;
-    gap:4px;
+    grid-column:4;
+    width:auto;
   }
 
   .iconBtn{
