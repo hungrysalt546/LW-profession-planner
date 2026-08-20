@@ -1,29 +1,12 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>HungrySalt546's Season 2 Engineer Guide</title><link rel="stylesheet" href="style.css"></head><body>
-<header class="brandHeader">
-  <div class="brandCopy">
-    <div class="eyebrow">LAST WAR SURVIVAL · WLVR</div>
-    <h1>HungrySalt546's Guide</h1>
-    <p class="guideTitle">Season 2 Engineer Planner</p>
-  </div>
-  <div class="headerMascot" aria-label="HungrySalt mascot">
-    <img src="images/hungrysalt-helper.png" alt="HungrySalt giving a thumbs up">
-    <div class="mascotTag"><span>ENGINEER ASSIST</span></div>
-  </div>
-  <div class="stats"><label>Profession Lv.<input id="level" type="number" min="1" max="70" placeholder="Level"></label><label>Points Available<input id="points" type="number" min="0" max="100" placeholder="Points"></label></div>
-</header>
-<nav>
-  <button id="resetBtn" class="tab active">
-    Recommended Build
-  </button>
-
-  <button id="clearBtn">
-    Clear Build
-  </button>
-
-  <button id="compareBtn">
-    Compare Changes
-  </button>
-</nav><div class="summary"><div><b id="modeTitle">Recommended Build</b><span id="subtitle"></span></div><div class="meter"><span id="used">0</span>/<span id="available">70</span> used · <span id="remaining">10</span> left</div></div>
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Season 2 Engineer Planner</title><link rel="stylesheet" href="style.css"></head><body>
+<header><div><div class="eyebrow">LAST WAR SURVIVAL</div><h1>Season 2 Engineer Planner</h1><p>Current-game screenshots + video tier list kept separate · green branch prerequisites enforced · live editable build</p></div><div class="stats"><label>Profession Lv.<input id="level" type="number" min="1" max="70" value="55"></label><label>Points Available<input id="points" type="number" min="0" max="150" value="66"></label></div></header>
+<div class="source-note"><b>Accuracy rule:</b> skill names, icons and descriptions come from your current-game screenshots. The S+/S/A/B badge is only the video ranking. <b>Drone Supply</b> and <b>Siege Inspiration</b> are flagged where the current game differs from the video. Green Season 2 skills require at least 1 point in each prior green skill to continue up the branch. <b>Utility flex:</b> when points remain after the core plan, the recommendation can use 1 point in Siege Mastery and 1 point in Buddy Shield before lower-priority filler.</div>
+<nav><button class="tab active" data-mode="recommended">Recommended</button><button class="tab" data-mode="mine">My Build</button><button id="compareBtn">Compare</button></nav>
+<div class="summary"><div><b id="modeTitle">Recommended Build</b><span id="subtitle"></span></div><div class="meter"><span id="used">0</span>/<span id="available">66</span> used · <span id="remaining">0</span> left</div></div>
 <main><section id="tree" class="tree"></section><aside id="compare" class="compare hidden"><h2>Recommended Changes</h2><div id="compareText"></div></aside></main>
-<dialog id="detailModal"><div class="modalHead"><div class="modalTitleRow"><h2 id="detailTitle"></h2><span id="detailTier" class="tier"></span></div><button id="closeDetail">×</button></div><img id="detailImg" alt="Exact in-game skill description"><p id="detailNote"></p></dialog>
-<footer><span>HungrySalt546 · Season 2 Engineer Guide</span><span>WLVR · Together We Rise</span></footer><script src="planner.js"></script></body></html>
+<dialog id="detailModal"><div class="modalHead"><div class="modalTitleRow"><h2 id="detailTitle"></h2><span id="detailTier" class="tier"></span></div><button id="closeDetail">×</button></div><img id="detailImg" alt="Exact in-game skill description"><p id="detailNote"></p></dialog><div id="detailControls" class="detailControls">
+  <button id="detailMinus">−</button>
+  <strong id="detailPoints">0/0</strong>
+  <button id="detailPlus">+</button>
+</div>
+<footer><span>Orange/left skills: profession-level gated</span><span>Green/right skills: level gated + sequential branch</span></footer><script src="planner.js"></script></body></html>
