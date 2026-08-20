@@ -361,16 +361,12 @@ function card(s, vals){
       <button
         class="iconBtn"
         data-detail="${s.id}"
-        title="View ${s.name}"
+        title="View in-game description"
       >
         <img
           src="${s.icon}"
           alt="${s.name}"
         >
-
-        <span class="mobilePoints">
-          ${n}/${s.max}
-        </span>
       </button>
 
       <div class="skillbody">
