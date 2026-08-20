@@ -189,6 +189,7 @@ function hasActiveSeasonChild(id, values){
 // Starts blank. Once both inputs are entered, recommendation auto-fills.
 let customBuild = blankBuild();
 let isCustom = false;
+let openDetailId = null;
 
 function currentBuild(){
   if(!inputsReady()) return blankBuild();
@@ -349,53 +350,88 @@ function compareBuild(){
   $('#compareBox').scrollIntoView({behavior:'smooth', block:'nearest'});
 }
 
+function updateDetailControls(){
+  if(!openDetailId) return;
+
+  const skill = byId[openDetailId];
+  if(!skill) return;
+
+  const values = currentBuild();
+  const current = values[openDetailId] || 0;
+
+  const lockedByLevel =
+    !inputsReady() ||
+    skill.lv > +level.value;
+
+  const lockedBySeason =
+    skill.branch === 'season' &&
+    !prereqMet(skill, values);
+
+  const locked =
+    lockedByLevel || lockedBySeason;
+
+  const canMinus =
+    !locked &&
+    current > 0 &&
+    !(
+      skill.branch === 'season' &&
+      current === 1 &&
+      hasActiveSeasonChild(skill.id, values)
+    );
+
+  const canPlus =
+    !locked &&
+    current < skill.max &&
+    used(values) < (+points.value || 0);
+
+  $('#detailPoints').textContent =
+    `${current}/${skill.max}`;
+
+  $('#detailMinus').disabled =
+    !canMinus;
+
+  $('#detailPlus').disabled =
+    !canPlus;
+}
+
 function showDetail(id){
+  const skill = byId[id];
 
-  const s = byId[id];
-
-  if(!s) return;
+  if(!skill) return;
 
   openDetailId = id;
 
   $('#detailTitle').textContent =
-    s.name;
+    skill.name;
 
-  const t =
+  const tier =
     $('#detailTier');
 
-  if(s.tier){
+  if(skill.tier){
+    tier.textContent =
+      skill.tier;
 
-    t.textContent =
-      s.tier;
-
-    t.className =
+    tier.className =
       'tier ' +
-      tierClass(s.tier);
+      tierClass(skill.tier);
 
-    t.style.display =
+    tier.style.display =
       'inline-flex';
-
   }else{
-
-    t.textContent =
-      '';
-
-    t.style.display =
-      'none';
-
+    tier.textContent = '';
+    tier.style.display = 'none';
   }
 
-  const vals =
-    currentBuild();
-
-  $('#detailPoints').textContent =
-    `${vals[id] || 0}/${s.max}`;
-
   $('#detailImg').src =
-    s.detail;
+    skill.detail;
 
-  $('#detailModal')
-    .showModal();
+  $('#detailNote').textContent =
+    skill.note ||
+    'Exact current-game description from your screenshot.';
+
+  updateDetailControls();
+
+  $('#detailModal').showModal();
 }
 
 function render(){
@@ -451,44 +487,19 @@ function render(){
   });
 }
 
-$('#detailMinus').onclick = () => {
-
+$('#detailMinus').addEventListener('click', () => {
   if(!openDetailId) return;
 
-  adjust(
-    openDetailId,
-    -1
-  );
+  adjust(openDetailId, -1);
+  updateDetailControls();
+});
 
-  const s =
-    byId[openDetailId];
-
-  const vals =
-    currentBuild();
-
-  $('#detailPoints').textContent =
-    `${vals[openDetailId] || 0}/${s.max}`;
-};
-
-
-$('#detailPlus').onclick = () => {
-
+$('#detailPlus').addEventListener('click', () => {
   if(!openDetailId) return;
 
-  adjust(
-    openDetailId,
-    1
-  );
-
-  const s =
-    byId[openDetailId];
-
-  const vals =
-    currentBuild();
-
-  $('#detailPoints').textContent =
-    `${vals[openDetailId] || 0}/${s.max}`;
-};
+  adjust(openDetailId, 1);
+  updateDetailControls();
+});
 
 function onInputsChanged(){
   hideCompare();
@@ -510,6 +521,9 @@ points.addEventListener('input', onInputsChanged);
 $('#resetBtn').addEventListener('click', resetToRecommended);
 $('#clearBtn').addEventListener('click', clearBuild);
 $('#compareBtn').addEventListener('click', compareBuild);
-$('#closeDetail').addEventListener('click', () => $('#detailModal').close());
+$('#closeDetail').addEventListener('click', () => {
+  openDetailId = null;
+  $('#detailModal').close();
+});
 
 render();
