@@ -497,6 +497,43 @@ $('#detailPlus').addEventListener('click', () => {
   updateDetailControls();
 });
 
+function changePoints(amount){
+
+  let current =
+    Number(points.value);
+
+  if(Number.isNaN(current)){
+    current = 0;
+  }
+
+  let next =
+    current + amount;
+
+  next =
+    Math.max(0, Math.min(150, next));
+
+  points.value =
+    next;
+
+  points.dispatchEvent(
+    new Event('input', {
+      bubbles:true
+    })
+  );
+}
+
+
+$('#pointsDown').addEventListener(
+  'click',
+  () => changePoints(-1)
+);
+
+
+$('#pointsUp').addEventListener(
+  'click',
+  () => changePoints(1)
+);
+
 function onInputsChanged(){
   hideCompare();
 
