@@ -26,10 +26,25 @@
       <input id="level" type="number" min="1" max="70" placeholder="Level">
     </label>
 
-    <label>
-      Points Available
-      <input id="points" type="number" min="0" max="150" placeholder="Points">
-    </label>
+<label>
+  Points Available
+
+  <div class="numberStepper">
+    <button id="pointsDown" type="button">−</button>
+
+    <input
+      id="points"
+      type="number"
+      min="0"
+      max="150"
+      step="1"
+      placeholder="Points"
+      inputmode="numeric"
+    >
+
+    <button id="pointsUp" type="button">+</button>
+  </div>
+</label>
   </div>
 </header>
 
